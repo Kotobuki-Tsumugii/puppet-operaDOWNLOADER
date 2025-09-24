@@ -1,0 +1,15 @@
+{
+  "name": "download-page-builder",
+  "version": "1.0.0",
+  "description": "Builds download page for private GitHub releases",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
