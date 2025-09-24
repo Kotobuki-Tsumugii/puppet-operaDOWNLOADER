@@ -25,15 +25,19 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
-
+        # 移除 cache 配置，避免锁文件检查
+        #哇网页端真78不好用，本来可以命令行生成锁文件的
     - name: Install dependencies
-      run: npm install
+      run: |
+        # 使用 --no-package-lock 跳过锁文件检查
+        npm install --no-package-lock
+        # 或者使用 --production=false 确保保安装所有依赖
+        npm install --production=false --no-package-lock
 
     - name: Build download page
       env:
-        PRIVATE_REPO_OWNER: ${{ vars.PRIVATE_REPO_OWNER || 'YOUR_GITHUB_USERNAME' }}
-        PRIVATE_REPO_NAME: ${{ vars.PRIVATE_REPO_NAME || 'YOUR_PRIVATE_REPO' }}
+        PRIVATE_REPO_OWNER: ${{ vars.PRIVATE_REPO_OWNER || 'Kotobuki-Tsumugii' }}
+        PRIVATE_REPO_NAME: ${{ vars.PRIVATE_REPO_NAME || '您的私有仓库名' }}
         GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
       run: node build.js
 
