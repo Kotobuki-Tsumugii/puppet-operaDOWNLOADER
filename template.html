@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Center</title>
+  <style>
+    :root {
+      --primary: #0366d6;
+      --bg: #f6f8fa;
+      --text: #24292e;
+      --border: #e1e4e8;
+      --card-bg: #ffffff;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      color: var(--text);
+      background-color: var(--bg);
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .release-info {
+      background-color: var(--card-bg);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .release-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .release-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    
+    .release-date {
+      color: #6a737d;
+      font-size: 0.9rem;
+    }
+    
+    .release-notes {
+      background-color: #f6f8fa;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 15px;
+      margin-top: 15px;
+      white-space: pre-wrap;
+    }
+    
+    .downloads-container {
+      background-color: var(--card-bg);
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .downloads-header {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .download-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .download-item:last-child {
+      border-bottom: none;
+    }
+    
+    .file-name {
+      flex: 3;
+      font-weight: 500;
+    }
+    
+    .file-size, .file-date {
+      flex: 1;
+      color: #6a737d;
+      font-size: 0.9rem;
+    }
+    
+    .download-button {
+      flex: 1;
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      max-width: 120px;
+    }
+    
+    .download-button:hover {
+      background-color: #0356b6;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: #6a737d;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .download-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .file-name, .file-size, .file-date {
+        margin-bottom: 10px;
+      }
+      
+      .download-button {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Download Center</h1>
+    <p>Get the latest version of our software</p>
+  </header>
+  
+  <main>
+    <section class="release-info">
+      <div class="release-header">
+        <h2 class="release-title">{{RELEASE_NAME}}</h2>
+        <div class="release-date">Released on {{RELEASE_DATE}}</div>
+      </div>
+      
+      <div class="release-notes">
+        {{RELEASE_NOTES}}
+      </div>
+    </section>
+    
+    <section class="downloads-container">
+      <h3 class="downloads-header">Available Downloads</h3>
+      {{DOWNLOADS_LIST}}
+    </section>
+  </main>
+  
+  <footer>
+    <p>© 2023 Your Company Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>
