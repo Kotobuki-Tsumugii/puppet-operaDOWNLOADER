@@ -1,16 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download Center</title>
+  <title>下载PuppetOpera</title>
   <style>
     :root {
-      --primary: #0366d6;
-      --bg: #f6f8fa;
-      --text: #24292e;
-      --border: #e1e4e8;
-      --card-bg: #ffffff;
+      --primary: #6C63FF;
+      --primary-light: #8A85FF;
+      --primary-dark: #5A52D9;
+      --secondary: #FF6584;
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --text-primary: #1E293B;
+      --text-secondary: #64748B;
+      --text-tertiary: #94A3B8;
+      --border: #E2E8F0;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.03);
+      --shadow-md: 0 8px 16px rgba(0,0,0,0.05);
+      --shadow-lg: 0 16px 32px rgba(0,0,0,0.08);
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     * {
@@ -20,166 +32,369 @@
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.5;
-      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--text-primary);
       background-color: var(--bg);
-      padding: 20px;
-      max-width: 1200px;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    /* 动画定义 */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.02);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0.8);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2.5);
+        opacity: 0;
+      }
+    }
+    
+    /* 页面标题区域 */
+    .page-header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 40px 0;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .page-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 600px;
       margin: 0 auto;
     }
     
-    header {
-      text-align: center;
+    /* 版本信息卡片 */
+    .release-card {
+      background-color: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 32px;
       margin-bottom: 40px;
-      padding: 30px 0;
-      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+      transition: var(--transition);
     }
     
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-    
-    .release-info {
-      background-color: var(--card-bg);
-      border-radius: 6px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    .release-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
     }
     
     .release-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
     
     .release-title {
       font-size: 1.8rem;
       font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .version-badge {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-left: 12px;
     }
     
     .release-date {
-      color: #6a737d;
-      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
     }
     
     .release-notes {
-      background-color: #f6f8fa;
+      background-color: #F8FAFF;
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 15px;
-      margin-top: 15px;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-top: 20px;
       white-space: pre-wrap;
+      line-height: 1.7;
+      font-size: 1rem;
+      animation: slideInRight 0.6s ease-out 0.4s both;
     }
     
-    .downloads-container {
-      background-color: var(--card-bg);
-      border-radius: 6px;
-      padding: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    /* 下载区域 */
+    .downloads-section {
+      background-color: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      animation: fadeInUp 0.8s ease-out 0.4s both;
     }
     
-    .downloads-header {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
       border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .download-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
     
     .download-item {
       display: flex;
       align-items: center;
-      padding: 15px;
-      border-bottom: 1px solid var(--border);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+      animation: slideInRight 0.6s ease-out both;
     }
     
-    .download-item:last-child {
-      border-bottom: none;
+    .download-item:nth-child(1) { animation-delay: 0.5s; }
+    .download-item:nth-child(2) { animation-delay: 0.6s; }
+    .download-item:nth-child(3) { animation-delay: 0.7s; }
+    .download-item:nth-child(4) { animation-delay: 0.8s; }
+    
+    .download-item:hover {
+      background-color: #F8FAFF;
+      transform: translateX(5px);
+    }
+    
+    .file-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      color: white;
+      font-size: 1.2rem;
+    }
+    
+    .file-info {
+      flex: 1;
     }
     
     .file-name {
-      flex: 3;
-      font-weight: 500;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
     }
     
-    .file-size, .file-date {
-      flex: 1;
-      color: #6a737d;
+    .file-meta {
+      display: flex;
+      gap: 20px;
+      color: var(--text-secondary);
       font-size: 0.9rem;
     }
     
-    .download-button {
-      flex: 1;
-      display: inline-block;
-      padding: 8px 16px;
-      background-color: var(--primary);
+    .download-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
       text-decoration: none;
-      border-radius: 6px;
-      text-align: center;
-      font-weight: 500;
-      transition: background-color 0.2s;
-      max-width: 120px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      min-width: 120px;
     }
     
-    .download-button:hover {
-      background-color: #0356b6;
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      animation: pulse 1s infinite;
     }
     
+    .download-btn:active {
+      transform: translateY(0);
+    }
+    
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+    
+    /* 页脚 */
     footer {
       text-align: center;
-      margin-top: 40px;
-      padding-top: 20px;
+      margin-top: 60px;
+      padding-top: 30px;
       border-top: 1px solid var(--border);
-      color: #6a737d;
-      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
     }
     
+    /* 响应式设计 */
     @media (max-width: 768px) {
-      .download-item {
+      .container {
+        padding: 20px 16px;
+      }
+      
+      .page-title {
+        font-size: 2.2rem;
+      }
+      
+      .release-header {
         flex-direction: column;
         align-items: flex-start;
       }
       
-      .file-name, .file-size, .file-date {
-        margin-bottom: 10px;
+      .download-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
       }
       
-      .download-button {
-        align-self: flex-end;
+      .file-info {
+        width: 100%;
+      }
+      
+      .download-btn {
+        align-self: stretch;
+        min-width: auto;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Download Center</h1>
-    <p>Get the latest version of our software</p>
-  </header>
-  
-  <main>
-    <section class="release-info">
-      <div class="release-header">
-        <h2 class="release-title">{{RELEASE_NAME}}</h2>
-        <div class="release-date">Released on {{RELEASE_DATE}}</div>
-      </div>
-      
-      <div class="release-notes">
-        {{RELEASE_NOTES}}
-      </div>
-    </section>
+  <div class="container">
+    <header class="page-header">
+      <h1 class="page-title">PuppetOpera下载</h1>
+      <p class="page-subtitle">获取游戏的最新版本和更新内容</p>
+    </header>
     
-    <section class="downloads-container">
-      <h3 class="downloads-header">Available Downloads</h3>
-      {{DOWNLOADS_LIST}}
-    </section>
-  </main>
-  
-  <footer>
-    <p>© 2023 Your Company Name. All rights reserved.</p>
-  </footer>
+    <main>
+      <section class="release-card">
+        <div class="release-header">
+          <h2 class="release-title">
+            {{RELEASE_NAME}}
+            <span class="version-badge">船新版本，船新体验</span>
+          </h2>
+          <div class="release-date">发布于 {{RELEASE_DATE}}</div>
+        </div>
+        
+        <div class="release-notes">
+          {{RELEASE_NOTES}}
+        </div>
+      </section>
+      
+      <section class="downloads-section">
+        <h3 class="section-title">可用下载</h3>
+        <div class="download-list">
+          {{DOWNLOADS_LIST}}
+        </div>
+      </section>
+    </main>
+    
+    <footer>
+      <p>© 2025 那些家伙的游戏工作室。保留所有权利。</p>
+    </footer>
+  </div>
+
+  <script>
+    // 添加按钮点击涟漪效果
+    document.addEventListener('DOMContentLoaded', function() {
+      const buttons = document.querySelectorAll('.download-btn');
+      
+      buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          ripple.classList.add('ripple');
+          
+          this.appendChild(ripple);
+          
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
