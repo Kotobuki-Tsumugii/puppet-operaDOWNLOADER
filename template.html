@@ -3,49 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>下载PuppetOpera</title>
+  <title>下载个PuppetOpera玩玩</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #6C63FF;
       --primary-light: #8A85FF;
       --primary-dark: #5A52D9;
       --secondary: #FF6584;
-      --bg: #F8FAFC;
-      --surface: #FFFFFF;
+      --bg: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+      --surface: rgba(255, 255, 255, 0.85);
+      --glass: rgba(255, 255, 255, 0.2);
       --text-primary: #1E293B;
       --text-secondary: #64748B;
       --text-tertiary: #94A3B8;
-      --border: #E2E8F0;
+      --border: rgba(226, 232, 240, 0.5);
       --shadow-sm: 0 2px 4px rgba(0,0,0,0.03);
       --shadow-md: 0 8px 16px rgba(0,0,0,0.05);
       --shadow-lg: 0 16px 32px rgba(0,0,0,0.08);
-      --radius-sm: 6px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       line-height: 1.6;
       color: var(--text-primary);
-      background-color: var(--bg);
-      padding: 0;
+      background: var(--bg);
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
-    
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 420px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      z-index: -1;
+      border-radius: 0 0 40% 40%;
+      transform: scale(1.5);
+    }
+
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 40px 20px;
+      position: relative;
+      z-index: 1;
     }
-    
+
     /* 动画定义 */
     @keyframes fadeInUp {
       from {
@@ -57,7 +75,7 @@
         transform: translateY(0);
       }
     }
-    
+
     @keyframes slideInRight {
       from {
         opacity: 0;
@@ -68,19 +86,22 @@
         transform: translateX(0);
       }
     }
-    
+
     @keyframes pulse {
       0% {
         transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.7);
       }
-      50% {
+      70% {
         transform: scale(1.02);
+        box-shadow: 0 0 0 12px rgba(108, 99, 255, 0);
       }
       100% {
         transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(108, 99, 255, 0);
       }
     }
-    
+
     @keyframes ripple {
       0% {
         transform: scale(0.8);
@@ -91,176 +112,321 @@
         opacity: 0;
       }
     }
-    
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
     /* 页面标题区域 */
     .page-header {
       text-align: center;
       margin-bottom: 60px;
-      padding: 40px 0;
+      padding: 60px 0 40px;
       animation: fadeInUp 0.8s ease-out;
+      position: relative;
     }
-    
+
+    .logo-container {
+      margin-bottom: 20px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      background: var(--surface);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-lg);
+      border: 2px solid var(--border);
+    }
+
+    .logo i {
+      font-size: 48px;
+      color: var(--primary);
+    }
+
     .page-title {
-      font-size: 3rem;
-      font-weight: 700;
+      font-size: 3.5rem;
+      font-weight: 800;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    
+
     .page-subtitle {
-      font-size: 1.2rem;
-      color: var(--text-secondary);
-      max-width: 600px;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 700px;
       margin: 0 auto;
+      font-weight: 300;
     }
-    
+
     /* 版本信息卡片 */
     .release-card {
       background-color: var(--surface);
       border-radius: var(--radius-lg);
-      padding: 32px;
+      padding: 40px;
       margin-bottom: 40px;
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
       animation: fadeInUp 0.8s ease-out 0.2s both;
       transition: var(--transition);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    
+
     .release-card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     }
-    
+
     .release-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       flex-wrap: wrap;
       gap: 16px;
     }
-    
+
     .release-title {
-      font-size: 1.8rem;
-      font-weight: 600;
+      font-size: 2rem;
+      font-weight: 700;
       color: var(--text-primary);
       display: flex;
       align-items: center;
     }
-    
+
     .version-badge {
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
-      padding: 4px 12px;
+      padding: 6px 16px;
       border-radius: 20px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
       margin-left: 12px;
+      box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
     }
-    
+
     .release-date {
       color: var(--text-secondary);
-      font-size: 1rem;
+      font-size: 1.1rem;
       display: flex;
       align-items: center;
+      background: rgba(248, 250, 252, 0.8);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
     }
-    
+
+    .release-date i {
+      margin-right: 8px;
+      color: var(--primary);
+    }
+
     .release-notes {
-      background-color: #F8FAFF;
+      background-color: rgba(248, 250, 255, 0.6);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 24px;
+      padding: 28px;
       margin-top: 20px;
       white-space: pre-wrap;
       line-height: 1.7;
-      font-size: 1rem;
+      font-size: 1.05rem;
       animation: slideInRight 0.6s ease-out 0.4s both;
+      position: relative;
+      overflow: hidden;
     }
-    
+
+    .release-notes::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
+    /* 公告栏 */
+    .announcement-card {
+      background-color: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .announcement-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    .announcement-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .announcement-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .announcement-title i {
+      margin-right: 12px;
+      color: var(--primary);
+    }
+
+    .announcement-content {
+      background-color: rgba(248, 250, 255, 0.6);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      line-height: 1.7;
+      font-size: 1.05rem;
+      position: relative;
+    }
+
+    .announcement-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
     /* 下载区域 */
     .downloads-section {
       background-color: var(--surface);
       border-radius: var(--radius-lg);
-      padding: 32px;
-      box-shadow: var(--shadow-md);
+      padding: 40px;
+      box-shadow: var(--shadow-lg);
       border: 1px solid var(--border);
       animation: fadeInUp 0.8s ease-out 0.4s both;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    
+
     .section-title {
-      font-size: 1.6rem;
-      margin-bottom: 28px;
+      font-size: 1.8rem;
+      margin-bottom: 32px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--border);
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-primary);
+      display: flex;
+      align-items: center;
     }
-    
+
+    .section-title i {
+      margin-right: 12px;
+      color: var(--primary);
+    }
+
     .download-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
-    
+
     .download-item {
       display: flex;
       align-items: center;
-      padding: 20px;
+      padding: 24px;
       border-radius: var(--radius-md);
       transition: var(--transition);
       animation: slideInRight 0.6s ease-out both;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--border);
     }
-    
+
     .download-item:nth-child(1) { animation-delay: 0.5s; }
     .download-item:nth-child(2) { animation-delay: 0.6s; }
     .download-item:nth-child(3) { animation-delay: 0.7s; }
     .download-item:nth-child(4) { animation-delay: 0.8s; }
-    
+
     .download-item:hover {
-      background-color: #F8FAFF;
+      background-color: rgba(248, 250, 255, 0.8);
       transform: translateX(5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
     }
-    
+
     .file-icon {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 20px;
+      margin-right: 24px;
       color: white;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+      box-shadow: 0 6px 12px rgba(108, 99, 255, 0.25);
     }
-    
+
     .file-info {
       flex: 1;
     }
-    
+
     .file-name {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 4px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      color: var(--text-primary);
     }
-    
+
     .file-meta {
       display: flex;
-      gap: 20px;
+      gap: 24px;
       color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .file-meta span {
+      display: flex;
+      align-items: center;
+    }
+
+    .file-meta i {
+      margin-right: 6px;
       font-size: 0.9rem;
     }
-    
+
     .download-btn {
       position: relative;
       overflow: hidden;
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      padding: 12px 24px;
+      padding: 14px 32px;
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
       text-decoration: none;
@@ -269,19 +435,24 @@
       transition: var(--transition);
       border: none;
       cursor: pointer;
-      min-width: 120px;
+      min-width: 140px;
+      box-shadow: 0 6px 15px rgba(108, 99, 255, 0.4);
+      font-size: 1.05rem;
     }
-    
+
     .download-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-      animation: pulse 1s infinite;
+      transform: translateY(-3px);
+      animation: pulse 1.5s infinite;
     }
-    
+
     .download-btn:active {
       transform: translateY(0);
     }
-    
+
+    .download-btn i {
+      margin-left: 8px;
+    }
+
     .ripple {
       position: absolute;
       border-radius: 50%;
@@ -290,57 +461,151 @@
       animation: ripple 0.6s linear;
       pointer-events: none;
     }
-    
+
     /* 页脚 */
     footer {
       text-align: center;
-      margin-top: 60px;
+      margin-top: 80px;
       padding-top: 30px;
       border-top: 1px solid var(--border);
       color: var(--text-secondary);
       font-size: 0.95rem;
       animation: fadeInUp 0.8s ease-out 0.6s both;
     }
-    
+
+    footer p {
+      margin-bottom: 8px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--text-secondary);
+      font-size: 1.4rem;
+      transition: var(--transition);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .social-links a:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      color: var(--primary);
+    }
+
+    .social-links a.bilibili:hover {
+      color: #00A1D6;
+    }
+
+    .social-links a.github:hover {
+      color: #333;
+    }
+
+    .social-links a.email:hover {
+      color: #E34133;
+    }
+
+    /* 装饰元素 */
+    .decoration {
+      position: absolute;
+      z-index: 0;
+      opacity: 0.1;
+    }
+
+    .decoration.circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 15px solid var(--primary);
+      top: 10%;
+      right: 5%;
+    }
+
+    .decoration.triangle {
+      width: 0;
+      height: 0;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      border-bottom: 180px solid var(--secondary);
+      bottom: 15%;
+      left: 5%;
+      transform: rotate(30deg);
+    }
+
     /* 响应式设计 */
     @media (max-width: 768px) {
       .container {
         padding: 20px 16px;
       }
-      
+
       .page-title {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
       }
-      
+
       .release-header {
         flex-direction: column;
         align-items: flex-start;
       }
-      
+
+      .announcement-card,
+      .release-card,
+      .downloads-section {
+        padding: 24px;
+      }
+
       .download-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
+        gap: 20px;
       }
-      
+
+      .file-icon {
+        margin-right: 0;
+        margin-bottom: 16px;
+      }
+
       .file-info {
         width: 100%;
       }
-      
+
       .download-btn {
         align-self: stretch;
         min-width: auto;
+        margin-top: 12px;
+      }
+      
+      .decoration {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
+  <div class="decoration circle"></div>
+  <div class="decoration triangle"></div>
+  
   <div class="container">
     <header class="page-header">
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-gamepad"></i>
+        </div>
+      </div>
       <h1 class="page-title">PuppetOpera下载</h1>
-      <p class="page-subtitle">获取游戏的最新版本和更新内容</p>
+      <p class="page-subtitle">获取游戏的最新版本和更新内容↖(^ω^)↗</p>
     </header>
-    
+
     <main>
       <section class="release-card">
         <div class="release-header">
@@ -348,24 +613,59 @@
             {{RELEASE_NAME}}
             <span class="version-badge">船新版本，船新体验</span>
           </h2>
-          <div class="release-date">发布于 {{RELEASE_DATE}}</div>
+          <div class="release-date">
+            <i class="fas fa-calendar-alt"></i>
+            发布于 {{RELEASE_DATE}}
+          </div>
         </div>
-        
+
         <div class="release-notes">
           {{RELEASE_NOTES}}
         </div>
       </section>
-      
+
+      <!-- 公告栏 -->
+      <section class="announcement-card">
+        <div class="announcement-header">
+          <h2 class="announcement-title">
+            <i class="fas fa-bullhorn"></i>
+            公告栏
+          </h2>
+        </div>
+        
+        <div class="announcement-content">
+          <!-- 在这里添加您的公告内容 -->
+          <p>亲爱的玩家们：</p>
+          <p>这只是一次前端测试的说:D</p>
+          <p style="text-align: right; margin-top: 20px;">—— 那些家伙们的游戏工作室</p>
+        </div>
+      </section>
+
       <section class="downloads-section">
-        <h3 class="section-title">可用下载</h3>
+        <h3 class="section-title">
+          <i class="fas fa-download"></i>
+          可用下载
+        </h3>
         <div class="download-list">
           {{DOWNLOADS_LIST}}
         </div>
       </section>
     </main>
-    
+
     <footer>
-      <p>© 2025 那些家伙的游戏工作室。保留所有权利。</p>
+      <p>© 2025 那些家伙们的游戏工作室。保留所有权利。</p>
+      <p>尽情游van♂罢</p>
+      <div class="social-links">
+        <a href="https://b23.tv/YYzzIcA" class="bilibili" title="Bilibili">
+          <i class="fab fa-bilibili"></i>
+        </a>
+        <a href="https://github.com/Kotobuki-Tsumugii" class="github" title="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="mailto:tsumugi_glad@yeah.net" class="email" title="邮箱">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
     </footer>
   </div>
 
@@ -373,7 +673,7 @@
     // 添加按钮点击涟漪效果
     document.addEventListener('DOMContentLoaded', function() {
       const buttons = document.querySelectorAll('.download-btn');
-      
+
       buttons.forEach(button => {
         button.addEventListener('click', function(e) {
           const ripple = document.createElement('span');
@@ -381,14 +681,14 @@
           const size = Math.max(rect.width, rect.height);
           const x = e.clientX - rect.left - size / 2;
           const y = e.clientY - rect.top - size / 2;
-          
+
           ripple.style.width = ripple.style.height = size + 'px';
           ripple.style.left = x + 'px';
           ripple.style.top = y + 'px';
           ripple.classList.add('ripple');
-          
+
           this.appendChild(ripple);
-          
+
           setTimeout(() => {
             ripple.remove();
           }, 600);
