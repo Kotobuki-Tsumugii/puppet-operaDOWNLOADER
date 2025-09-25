@@ -31,91 +31,69 @@ jobs:
 
     - name: Debug and test API access
       env:
-        PRIVATE_REPO_OWNER: ${{ vars.PRIVATE_REPO_Owner || 'Kotobuki-Tsumugii' }}
+        PRIVATE_REPO_OWNER: ${{ vars.PRIVATE_REPO_OWNER || 'Kotobuki-Tsumugii' }}
         PRIVATE_REPO_NAME: ${{ vars.PRIVATE_REPO_NAME || 'puppet-opera' }}
-        GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+        GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN || secrets.GITHUB_TOKEN }}
       run: |
+        set -euo pipefail
         echo "=== 详细调试信息 ==="
         echo "仓库: $PRIVATE_REPO_OWNER/$PRIVATE_REPO_NAME"
-        echo "Token 前8位: ${GH_TOKEN:0:8}..."
-        
-        # 测试基础认证
+        if [ -z "${GH_TOKEN:-}" ]; then
+          echo "❌ GH token 为空（请在仓库 Secrets 中添加 PRIVATE_REPO_TOKEN，或使用 GITHUB_TOKEN）"
+        else
+          echo "Token 前8位: ${GH_TOKEN:0:8}..."
+        fi
+
+        # 安装 jq（确保可用）
+        if ! command -v jq >/dev/null 2>&1; then
+          echo "安装 jq ..."
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+        fi
+
         echo "测试基础认证..."
-        curl -H "Authorization: token $GH_TOKEN" \
-             -s https://api.github.com/user | jq '.login' || echo "无法获取用户信息"
-        
-        # 测试仓库访问权限
+        curl -s -H "Authorization: token $GH_TOKEN" https://api.github.com/user | jq '.login' || echo "无法获取用户信息"
+
         echo "测试仓库访问权限..."
-        repo_response=$(curl -H "Authorization: token $GH_TOKEN" \
-          -s -w "%{http_code}" \
-          https://api.github.com/repos/$PRIVATE_REPO_OWNER/$PRIVATE_REPO_NAME)
-        
-        repo_status=${repo_response: -3}
-        repo_body=${repo_response%???}
-        
-        echo "仓库API状态码: $repo_status"
-        if [ "$repo_status" -eq 200 ]; then
+        http_code=$(curl -s -o /tmp/repo_body -w "%{http_code}" -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/$PRIVATE_REPO_OWNER/$PRIVATE_REPO_NAME")
+        echo "仓库API状态码: $http_code"
+        if [ "$http_code" -eq 200 ]; then
           echo "✅ 仓库访问成功"
-          echo "仓库信息:"
-          echo "$repo_body" | jq '{name: .name, private: .private, permissions: .permissions}'
+          cat /tmp/repo_body | jq '{name: .name, private: .private, permissions: .permissions}'
         else
-          echo "❌ 仓库访问失败"
-          echo "错误信息: $repo_body"
-        fi
-        
-        # 测试releases访问
-        echo "测试releases访问..."
-        releases_response=$(curl -H "Authorization: token $GH_TOKEN" \
-          -s -w "%{http_code}" \
-          "https://api.github.com/repos/$PRIVATE_REPO_OWNER/$PRIVATE_REPO_NAME/releases")
-        
-        releases_status=${releases_response: -3}
-        releases_body=${releases_response%???}
-        
-        echo "Releases API状态码: $releases_status"
-        if [ "$releases_status" -eq 200 ]; then
-          release_count=$(echo "$releases_body" | jq length)
-          echo "✅ 找到 $release_count 个release"
-          if [ "$release_count" -gt 0 ]; then
-            echo "最新release:"
-            echo "$releases_body" | jq '.[0] | {name: .name, tag_name: .tag_name, assets: .assets | length}'
-          else
-            echo "⚠️  仓库中没有release"
-          fi
-        else
-          echo "❌ Releases访问失败"
-          echo "错误信息: $releases_body"
+          echo "❌ 仓库访问失败，返回："
+          cat /tmp/repo_body
         fi
 
-    - name: Build download page
-      env:
-        PRIVATE_REPO_OWNER: ${{ vars.PRIVATE_REPO_Owner || 'Kotobuki-Tsumugii' }}
-        PRIVATE_REPO_NAME: ${{ vars.PRIVATE_REPO_NAME || 'puppet-opera' }}
-        GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      run: node build.js
+        echo "测试 releases 访问..."
+        http_code=$(curl -s -o /tmp/releases_body -w "%{http_code}" -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/$PRIVATE_REPO_OWNER/$PRIVATE_REPO_NAME/releases")
+        echo "Releases API状态码: $http_code"
+        if [ "$http_code" -eq 200 ]; then
+          count=$(jq length /tmp/releases_body)
+          echo "Found $count releases"
+        else
+          echo "无法访问 releases，返回："
+          cat /tmp/releases_body
+        fi
 
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: 'dist'
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: github-pages
-
-    steps:
-    - name: Deploy to GitHub Pages
-      uses: actions/deploy-pages@v4
     - name: Build download page
       env:
         PRIVATE_REPO_OWNER: ${{ vars.PRIVATE_REPO_OWNER || 'Kotobuki-Tsumugii' }}
-        PRIVATE_REPO_NAME: ${{ vars.PRIVATE_REPO_NAME || '您的私有仓库名' }}
-        GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-      run: node build.js
+        PRIVATE_REPO_NAME: ${{ vars.PRIVATE_REPO_NAME || 'puppet-opera' }}
+        GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+      run: |
+        set -euo pipefail
+        node build.js
+
+    - name: Inspect dist
+      run: |
+        if [ -d dist ]; then
+          echo "dist 内容:"
+          ls -la dist
+        else
+          echo "❌ dist 目录不存在 —— build.js 可能没有生成静态文件"
+          exit 1
+        fi
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
@@ -125,7 +103,7 @@ jobs:
       with:
         path: 'dist'
 
-  deploy:
+  publish:
     needs: build
     runs-on: ubuntu-latest
     environment: github-pages
