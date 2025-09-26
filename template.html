@@ -7,23 +7,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #6C63FF;
-      --primary-light: #8A85FF;
-      --primary-dark: #5A52D9;
-      --secondary: #FF6584;
-      --bg: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
-      --surface: rgba(255, 255, 255, 0.85);
+      --primary: #333333;
+      --primary-light: #555555;
+      --primary-dark: #000000;
+      --secondary: #666666;
+      --bg: #ffffff;
+      --surface: rgba(255, 255, 255, 0.95);
       --glass: rgba(255, 255, 255, 0.2);
       --text-primary: #1E293B;
-      --text-secondary: #64748B;
-      --text-tertiary: #94A3B8;
-      --border: rgba(226, 232, 240, 0.5);
+      --text-secondary: #666666;
+      --text-tertiary: #888888;
+      --border: rgba(0, 0, 0, 0.1);
       --shadow-sm: 0 2px 4px rgba(0,0,0,0.03);
       --shadow-md: 0 8px 16px rgba(0,0,0,0.05);
       --shadow-lg: 0 16px 32px rgba(0,0,0,0.08);
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -52,8 +52,21 @@
       height: 420px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       z-index: -1;
-      border-radius: 0 0 40% 40%;
-      transform: scale(1.5);
+      border-radius: 20px;
+      transform: rotate(45deg) scale(1.5);
+      animation: rotateAndFloat 30s linear infinite;
+    }
+
+    @keyframes rotateAndFloat {
+      0% {
+        transform: rotate(45deg) scale(1.5) translateY(0);
+      }
+      50% {
+        transform: rotate(45deg) scale(1.5) translateY(-20px);
+      }
+      100% {
+        transform: rotate(45deg) scale(1.5) translateY(0);
+      }
     }
 
     .container {
@@ -90,15 +103,15 @@
     @keyframes pulse {
       0% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.7);
+        box-shadow: 0 0 0 0 rgba(51, 51, 51, 0.7);
       }
       70% {
         transform: scale(1.02);
-        box-shadow: 0 0 0 12px rgba(108, 99, 255, 0);
+        box-shadow: 0 0 0 12px rgba(51, 51, 51, 0);
       }
       100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(108, 99, 255, 0);
+        box-shadow: 0 0 0 0 rgba(51, 51, 51, 0);
       }
     }
 
@@ -143,17 +156,41 @@
       width: 100px;
       height: 100px;
       background: var(--surface);
-      border-radius: 50%;
+      border-radius: 20px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       box-shadow: var(--shadow-lg);
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
     }
 
-    .logo i {
-      font-size: 48px;
-      color: var(--primary);
+    .eyes-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 33.33px;
+    }
+    
+    .eye {
+      width: 9.375px;
+      height: 37.5px;
+      background-color: #000;
+      border-radius: 2px;
+      position: relative;
+      transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    
+    .eye.blink {
+      animation: blink 0.4s forwards;
+    }
+    
+    @keyframes blink {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.05); }
     }
 
     .page-title {
@@ -216,7 +253,7 @@
       font-size: 0.95rem;
       font-weight: 600;
       margin-left: 12px;
-      box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(51, 51, 51, 0.3);
     }
 
     .release-date {
@@ -258,7 +295,7 @@
       background: linear-gradient(to bottom, var(--primary), var(--secondary));
     }
 
-    /* 公告栏 */
+    /* 公告栏 - 精加工 */
     .announcement-card {
       background-color: var(--surface);
       border-radius: var(--radius-lg);
@@ -320,6 +357,30 @@
       width: 4px;
       height: 100%;
       background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
+    .announcement-content p {
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .announcement-content p::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .announcement-content .signature {
+      text-align: right;
+      margin-top: 20px;
+      font-style: italic;
+      color: var(--text-secondary);
+      padding-right: 20px;
     }
 
     /* 下载区域 */
@@ -389,7 +450,7 @@
       margin-right: 24px;
       color: white;
       font-size: 1.5rem;
-      box-shadow: 0 6px 12px rgba(108, 99, 255, 0.25);
+      box-shadow: 0 6px 12px rgba(51, 51, 51, 0.25);
     }
 
     .file-info {
@@ -436,7 +497,7 @@
       border: none;
       cursor: pointer;
       min-width: 140px;
-      box-shadow: 0 6px 15px rgba(108, 99, 255, 0.4);
+      box-shadow: 0 6px 15px rgba(51, 51, 51, 0.4);
       font-size: 1.05rem;
     }
 
@@ -584,7 +645,7 @@
         min-width: auto;
         margin-top: 12px;
       }
-      
+
       .decoration {
         display: none;
       }
@@ -594,16 +655,19 @@
 <body>
   <div class="decoration circle"></div>
   <div class="decoration triangle"></div>
-  
+
   <div class="container">
     <header class="page-header">
       <div class="logo-container">
         <div class="logo">
-          <i class="fas fa-gamepad"></i>
+          <div class="eyes-container">
+            <div class="eye" id="left-eye"></div>
+            <div class="eye" id="right-eye"></div>
+          </div>
         </div>
       </div>
-      <h1 class="page-title">PuppetOpera下载</h1>
-      <p class="page-subtitle">获取游戏的最新版本和更新内容↖(^ω^)↗</p>
+      <h1 class="page-title">下载         PuppetOpera</h1>
+      <p class="page-subtitle">获取游戏的最新版本和船新内容</p>
     </header>
 
     <main>
@@ -624,7 +688,7 @@
         </div>
       </section>
 
-      <!-- 公告栏 -->
+      <!-- 公告栏  -->
       <section class="announcement-card">
         <div class="announcement-header">
           <h2 class="announcement-title">
@@ -632,12 +696,13 @@
             公告栏
           </h2>
         </div>
-        
+
         <div class="announcement-content">
-          <!-- 在这里添加您的公告内容 -->
           <p>亲爱的玩家们：</p>
           <p>这只是一次前端测试的说:D</p>
-          <p style="text-align: right; margin-top: 20px;">—— 那些家伙们的游戏工作室</p>
+          <p>我们正在努力开发中（心虚</p>
+          <p>敬请期待后续更新</p>
+          <p class="signature">—— 那些家伙们的游戏工作室</p>
         </div>
       </section>
 
@@ -670,6 +735,197 @@
   </div>
 
   <script>
+    // 状态常量
+    const STATE = {
+        FOLLOW: 'FOLLOW',
+        IDLE: 'IDLE',
+        LOOK_AROUND: 'LOOK_AROUND'
+    };
+    
+    // 配置参数
+    const config = {
+        idleDelay: 3000,     // 进入空闲状态的延迟时间(ms)
+        lookAroundDelay: 5000, // 进入随机视线状态的延迟时间(ms)
+        lookAroundDuration: 2000, // 随机视线状态的持续时间(ms)
+        blinkMinInterval: 3000, // 眨眼最小间隔时间(ms)
+        blinkMaxInterval: 7000, // 眨眼最大间隔时间(ms)
+        maxMoveDistance: 0.15, // 眼睛最大移动距离(相对于方块尺寸的比例)
+        moveTransition: '0.6s cubic-bezier(0.33, 1, 0.68, 1)' // 眼睛移动的过渡效果
+    };
+    
+    // 状态变量
+    let currentState = STATE.IDLE;
+    let lastMouseMoveTime = Date.now();
+    let lookAroundStartTime = 0;
+    let nextBlinkTime = 0;
+    let isBlinking = false;
+    let lastRandomPoint = { x: 0, y: 0 };
+    let idleTimeout = null;
+    let lookAroundTimeout = null;
+    
+    // DOM元素
+    const leftEye = document.getElementById('left-eye');
+    const rightEye = document.getElementById('right-eye');
+    
+    // 初始化
+    function init() {
+        // 设置眼睛的初始位置
+        resetEyesPosition();
+        
+        // 设置眨眼时间
+        scheduleNextBlink();
+        
+        // 添加事件监听
+        document.addEventListener('mousemove', handleMouseMove);
+        
+        // 开始状态循环
+        stateLoop();
+    }
+    
+    // 重置眼睛位置到中心
+    function resetEyesPosition() {
+        leftEye.style.transform = 'translate(0, 0)';
+        rightEye.style.transform = 'translate(0, 0)';
+    }
+    
+    // 处理鼠标移动
+    function handleMouseMove(e) {
+        lastMouseMoveTime = Date.now();
+        
+        // 如果当前状态不是跟随状态，切换到跟随状态
+        if (currentState !== STATE.FOLLOW && !isBlinking) {
+            setState(STATE.FOLLOW);
+        }
+        
+        // 更新眼睛位置
+        if (currentState === STATE.FOLLOW && !isBlinking) {
+            updateEyesPosition(e.clientX, e.clientY);
+        }
+    }
+    
+    // 更新眼睛位置
+    function updateEyesPosition(mouseX, mouseY) {
+        const logo = document.querySelector('.logo');
+        const logoRect = logo.getBoundingClientRect();
+        const logoCenterX = logoRect.left + logoRect.width / 2;
+        const logoCenterY = logoRect.top + logoRect.height / 2;
+        
+        // 计算鼠标相对于方块中心的位置
+        const relX = mouseX - logoCenterX;
+        const relY = mouseY - logoCenterY;
+        
+        // 计算眼睛应该移动的距离（限制在最大移动范围内）
+        const maxMove = logoRect.width * config.maxMoveDistance;
+        const distance = Math.min(Math.sqrt(relX * relX + relY * relY), maxMove);
+        const angle = Math.atan2(relY, relX);
+        
+        const moveX = Math.cos(angle) * distance;
+        const moveY = Math.sin(angle) * distance;
+        
+        // 应用移动
+        leftEye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        rightEye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    }
+    
+    // 设置状态
+    function setState(newState) {
+        // 清除所有超时
+        clearTimeout(idleTimeout);
+        clearTimeout(lookAroundTimeout);
+        
+        // 状态转换逻辑
+        switch (newState) {
+            case STATE.FOLLOW:
+                break;
+                
+            case STATE.IDLE:
+                resetEyesPosition();
+                // 设置进入LOOK_AROUND状态的超时
+                lookAroundTimeout = setTimeout(() => {
+                    if (currentState === STATE.IDLE) {
+                        setState(STATE.LOOK_AROUND);
+                    }
+                }, config.lookAroundDelay);
+                break;
+                
+            case STATE.LOOK_AROUND:
+                lookAroundStartTime = Date.now();
+                // 生成一个随机点
+                lastRandomPoint = generateRandomPoint();
+                updateEyesPosition(lastRandomPoint.x, lastRandomPoint.y);
+                // 设置返回IDLE状态的超时
+                lookAroundTimeout = setTimeout(() => {
+                    if (currentState === STATE.LOOK_AROUND) {
+                        setState(STATE.IDLE);
+                    }
+                }, config.lookAroundDuration);
+                break;
+        }
+        
+        currentState = newState;
+    }
+    
+    // 生成随机点（在方块附近）
+    function generateRandomPoint() {
+        const logo = document.querySelector('.logo');
+        const logoRect = logo.getBoundingClientRect();
+        const logoCenterX = logoRect.left + logoRect.width / 2;
+        const logoCenterY = logoRect.top + logoRect.height / 2;
+        
+        // 在方块附近随机位置
+        const range = logoRect.width * 0.5;
+        const randX = logoCenterX + (Math.random() - 0.5) * range;
+        const randY = logoCenterY + (Math.random() - 0.5) * range;
+        
+        return { x: randX, y: randY };
+    }
+    
+    // 眨眼动画
+    function blink() {
+        if (isBlinking) return;
+        
+        isBlinking = true;
+        leftEye.classList.add('blink');
+        rightEye.classList.add('blink');
+        
+        // 动画结束后移除类并重置标志
+        setTimeout(() => {
+            leftEye.classList.remove('blink');
+            rightEye.classList.remove('blink');
+            isBlinking = false;
+            scheduleNextBlink();
+        }, 400);
+    }
+    
+    // 安排下一次眨眼
+    function scheduleNextBlink() {
+        const interval = config.blinkMinInterval + 
+                        Math.random() * (config.blinkMaxInterval - config.blinkMinInterval);
+        nextBlinkTime = Date.now() + interval;
+    }
+    
+    // 状态循环
+    function stateLoop() {
+        const now = Date.now();
+        const timeSinceLastMove = now - lastMouseMoveTime;
+        
+        // 检查是否需要眨眼
+        if (!isBlinking && now >= nextBlinkTime) {
+            blink();
+        }
+        
+        // 状态转换检查
+        if (currentState === STATE.FOLLOW && timeSinceLastMove > config.idleDelay) {
+            setState(STATE.IDLE);
+        }
+        
+        // 继续循环
+        requestAnimationFrame(stateLoop);
+    }
+    
+    // 初始化应用
+    window.addEventListener('DOMContentLoaded', init);
+    
     // 添加按钮点击涟漪效果
     document.addEventListener('DOMContentLoaded', function() {
       const buttons = document.querySelectorAll('.download-btn');
